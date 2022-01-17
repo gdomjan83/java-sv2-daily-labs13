@@ -25,7 +25,7 @@ public class ClassNoteBook {
     public void addMark(int id, int mark) {
         for (Student actual : students.keySet()) {
             if (id == actual.getId()) {
-                students.get(id).add(mark);
+                students.get(actual).add(mark);
             }
         }
     }
