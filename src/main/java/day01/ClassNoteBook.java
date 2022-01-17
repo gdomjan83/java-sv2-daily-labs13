@@ -8,10 +8,6 @@ import java.util.TreeMap;
 public class ClassNoteBook {
     private Map<Student, List<Integer>> students = new TreeMap<>();
 
-    public ClassNoteBook(Map<Student, List<Integer>> students) {
-        this.students = students;
-    }
-
     public Map<Student, List<Integer>> getStudents() {
         return students;
     }
