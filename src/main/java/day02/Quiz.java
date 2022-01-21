@@ -31,9 +31,7 @@ public class Quiz {
     }
 
     public boolean gaveCorrectAnswer(String id, int question) {
-        String correct = String.valueOf(correctAnswer.charAt(question - 1));
-        String playerAnswer = String.valueOf(players.get(id).charAt(question - 1));
-        return correct.equals(playerAnswer);
+        return (correctAnswer.charAt(question - 1) == players.get(id).charAt(question - 1));
     }
 
     public String playerWithMostPoints() {
