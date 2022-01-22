@@ -4,17 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Vowels {
-    public static final String VOWELS = "AaEeIiOoUu";
+    public static final String VOWELS = "aeiou";
 
     public Map<Character, Integer> countVowels(String text) {
         Map<Character, Integer> result = new HashMap<>();
 
         for (Character c : text.toCharArray()) {
-            if (VOWELS.indexOf(c) != -1) {
-                if (result.containsKey(Character.toLowerCase(c))) {
-                    result.put(Character.toLowerCase(c), result.get(Character.toLowerCase(c)) + 1);
+            char character = Character.toLowerCase(c);
+            if (VOWELS.indexOf(character) != -1) {
+                if (result.containsKey(character)) {
+                    result.put(character, result.get(character) + 1);
                 } else {
-                    result.put(Character.toLowerCase(c), 1);
+                    result.put(character, 1);
                 }
             }
         }
