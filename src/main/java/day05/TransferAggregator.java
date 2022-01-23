@@ -4,17 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class Transfers {
-    private Map<String, Integer> clientAccounts = new HashMap<>();
+public class TransferAggregator {
+    private Map<String, TransferPerClient> transfers = new TreeMap<>();
 
-    public Map<String, Integer> getClientAccounts() {
-        return new HashMap<>(clientAccounts);
+    public Map<String, TransferPerClient> getTransfers() {
+        return new TreeMap<>(transfers);
     }
 
-    public void importData(Path path) {
+    public List<TransferPerClient> readTransfers(Path path) {
         try (BufferedReader br = Files.newBufferedReader(path)) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -22,8 +21,15 @@ public class Transfers {
                 creditAccount(transaction);
                 debitAccount(transaction);
             }
+            return new ArrayList<>(transfers.values());
         } catch (IOException ioe) {
             throw new IllegalArgumentException("Can not read file.", ioe);
+        }
+    }
+
+    public void writeToConsole(List<TransferPerClient> input) {
+        for (TransferPerClient actual : input) {
+            System.out.println(actual);
         }
     }
 
@@ -35,19 +41,17 @@ public class Transfers {
     }
 
     private void debitAccount(Transaction transaction) {
-        if (!clientAccounts.containsKey(transaction.receiver)) {
-            clientAccounts.put(transaction.receiver, transaction.amount);
-        } else {
-            clientAccounts.put(transaction.receiver, clientAccounts.get(transaction.receiver) + transaction.amount);
+        if (!transfers.containsKey(transaction.receiver)) {
+            transfers.put(transaction.receiver, new TransferPerClient(transaction.receiver));
         }
+        transfers.get(transaction.receiver).debit(transaction.amount);
     }
 
     private void creditAccount(Transaction transaction) {
-        if (!clientAccounts.containsKey(transaction.sender)) {
-            clientAccounts.put(transaction.sender, 0 - transaction.amount);
-        } else {
-            clientAccounts.put(transaction.sender, clientAccounts.get(transaction.sender) - transaction.amount);
+        if (!transfers.containsKey(transaction.sender)) {
+            transfers.put(transaction.sender, new TransferPerClient(transaction.sender));
         }
+        transfers.get(transaction.sender).credit(transaction.amount);
     }
 
     public class Transaction {
