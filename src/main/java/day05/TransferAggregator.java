@@ -29,7 +29,7 @@ public class TransferAggregator {
 
     public void writeToConsole(List<TransferPerClient> input) {
         for (TransferPerClient actual : input) {
-            System.out.println(actual);
+            System.out.printf("%s %,12d %5d\n", actual.getClientId(), actual.getSum(), actual.getNumberOfTransactions());;
         }
     }
 
